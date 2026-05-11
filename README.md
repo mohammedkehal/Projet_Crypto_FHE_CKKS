@@ -107,9 +107,58 @@ graph TD
         L
     end
 ```
+```text
+=======================================================================
+                   PHASE 1: BANQUE CLIENTE (Trusted Enclave)
+=======================================================================
+
+  Raw Data z in R^(N/2)
+  [4500.0, 1200.5, 710.0, 34.0]
+         |
+         v
+  Encoding: Delta = 2^40  -->  Polynomial m in R_q
+         |
+         v
+  RLWE Encryption  -->  c = (c0, c1)
+
+  [KEY] sk (kept local)  |  [OUT] pk, evk, c --> Cloud
+
+=======================================================================
+                   PHASE 2: CLOUD FINTECH (Zero-Trust)
+=======================================================================
+
+  [IN] Receive pk, evk, c
+         |
+         v
+  AI Model: W = [0.4, -0.7, 0.2, 0.1], Bias = +10.5
+         |
+         v
+  HE Evaluation: c_res = c * W + Bias
+  (Add, Mult, Relinearize, Rescale)
+         |
+         v
+  Noise critical? --> No (depth = 1) --> Continue
+         |
+         v
+  [OUT] Encrypted score --> Bank
+
+=======================================================================
+                   PHASE 3: BANQUE CLIENTE (Trusted Enclave)
+=======================================================================
+
+  [IN] Receive encrypted score
+         |
+         v
+  Decrypt: m' = c0 + c1 * sk  (mod q)
+         |
+         v
+  Decode: z' = m' / Delta
+         |
+         v
+  Final Score ~ 1115.55  -->  CREDIT APPROVED ✓
+```
 ---
 
-## 📁 Project Structure
 ## 📁 Project Structure
 
 ```text
