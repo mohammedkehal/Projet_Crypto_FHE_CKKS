@@ -70,55 +70,6 @@ Real-time interactive dashboard built with **Streamlit**:
 ---
 
 ## 🏗️ Architecture Flow
-```mermaid
-graph TD
-    A[Raw Data z] --> B[Encode with Delta]
-    B --> C[Message m in R_q]
-    C --> D[RLWE Encryption]
-    D --> E[Ciphertext c0, c1]
-    
-    E -->|pk, evk, c| F[Cloud FinTech]
-    F --> G[HE Evaluation]
-    G --> H[Encrypted Score]
-    
-    H -->|Return| I[Decrypt: m = c0 + c1 * sk]
-    I --> J[Decode: z = m / Delta]
-    J --> K[Final Score ~ 1115.55]
-    K --> L[CREDIT APPROVED]
-    
-    subgraph P1 ["PHASE 1: BANK (Trusted)"]
-        A
-        B
-        C
-        D
-        E
-    end
-    
-    subgraph P2 ["PHASE 2: CLOUD (Zero-Trust)"]
-        F
-        G
-        H
-    end
-    
-    subgraph P3 ["PHASE 3: BANK (Trusted)"]
-        I
-        J
-        K
-        L
-    end
-    
-    subgraph Phase 2: Cloud FinTech
-        F
-        G
-        H
-    end
-    
-    subgraph Phase 3: Banque Cliente
-        I
-        J
-        K
-        L
-    end
 ═══════════════════════════════════════════════════════════════════════
                     PHASE 1: BANQUE CLIENTE (Trusted Enclave)
 ═══════════════════════════════════════════════════════════════════════
@@ -195,7 +146,7 @@ CKKS_Financial_Scoring/
 ├── requirements.txt                # 📦 Python dependencies
 └── README.md                       # 📖 This file
 
-
+---
 ## 👨‍💻 Author
 **Mohammed KEHAL** |
 **Zineb CHAFIK** |
