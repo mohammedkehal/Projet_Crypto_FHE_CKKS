@@ -20,8 +20,8 @@ This project implements a fully functional Zero-Trust architecture for financial
 3. **Bank Client (Local):** Decrypts the output using the secret key to reveal the final credit score.
 
 ## 👨‍💻 Author
-**Mohammed KEHAL**
-**Zineb CHAFIK**
+**Mohammed KEHAL** |
+**Zineb CHAFIK** |
 **Ossama EL KHALFI**
 
 *Project developed within the Master's program in Computer Engineering and Systems Security (2I2S).*
