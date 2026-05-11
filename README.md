@@ -110,29 +110,33 @@ graph TD
 ---
 
 ## 📁 Project Structure
+## 📁 Project Structure
+
+```text
 CKKS_Financial_Scoring/
-|
-+-- bank_client/                    # Trusted Banking Enclave
-|   +-- __init__.py
-|   +-- keygen.py                   # Key generation (sk, pk, evk)
-|   +-- encrypt.py                  # Data encoding & RLWE encryption
-|   +-- decrypt.py                  # Score decryption & decoding
-|   +-- bank_context_secret.txt     # Secret context (sk) - NEVER leaves
-|
-+-- fintech_cloud/                  # Untrusted Cloud FinTech
-|   +-- __init__.py
-|   +-- ai_scoring_model.py         # AI model weights & bias
-|   +-- homomorphic_evaluation.py   # Blind inference on ciphertexts
-|
-+-- shared_data/                    # Encrypted data exchange zone
-|   +-- cloud_context_public.txt    # Public context (pk, evk only)
-|   +-- client_ciphertext.txt       # Encrypted client dossier
-|   +-- encrypted_score_result.txt  # Encrypted credit score
-|
-+-- app.py                          # SOC Streamlit dashboard
-+-- Dockerfile                      # Container configuration
-+-- requirements.txt                # Python dependencies
-+-- README.md                       # This file
+│
+├── bank_client/                    # Trusted Banking Enclave
+│   ├── __init__.py
+│   ├── keygen.py                   # Key generation (sk, pk, evk)
+│   ├── encrypt.py                  # Data encoding & RLWE encryption
+│   ├── decrypt.py                  # Score decryption & decoding
+│   └── bank_context_secret.txt     # Secret context (sk) - NEVER leaves
+│
+├── fintech_cloud/                  # Untrusted Cloud FinTech
+│   ├── __init__.py
+│   ├── ai_scoring_model.py         # AI model weights & bias
+│   └── homomorphic_evaluation.py   # Blind inference on ciphertexts
+│
+├── shared_data/                    # Encrypted data exchange zone
+│   ├── cloud_context_public.txt    # Public context (pk, evk only)
+│   ├── client_ciphertext.txt       # Encrypted client dossier
+│   └── encrypted_score_result.txt  # Encrypted credit score
+│
+├── app.py                          # SOC Streamlit dashboard
+├── Dockerfile                      # Container configuration
+├── requirements.txt                # Python dependencies
+└── README.md                       # This file
+```
 
 ---
 ## 🚀 Quick Start
