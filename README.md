@@ -72,26 +72,39 @@ Real-time interactive dashboard built with **Streamlit**:
 ## 🏗️ Architecture Flow
 ```mermaid
 graph TD
-    A[Données Brutes z] --> B[Encodage Δ = 2^40]
-    B --> C[Polynôme m ∈ R_q]
-    C --> D[Chiffrement RLWE]
-    D --> E[Ciphertext c = (c₀, c₁)]
+    A[Raw Data z] --> B[Encode with Delta]
+    B --> C[Message m in R_q]
+    C --> D[RLWE Encryption]
+    D --> E[Ciphertext c0, c1]
     
     E -->|pk, evk, c| F[Cloud FinTech]
-    F --> G[Évaluation Homomorphe]
-    G --> H[Score Chiffré]
+    F --> G[HE Evaluation]
+    G --> H[Encrypted Score]
     
-    H -->|Retour| I[Déchiffrement m' = c₀ + c₁·sk]
-    I --> J[Décodage z' = m'/Δ]
-    J --> K[Score Final ≈ 1115.55]
-    K --> L[CRÉDIT ACCORDÉ ✅]
+    H -->|Return| I[Decrypt: m = c0 + c1 * sk]
+    I --> J[Decode: z = m / Delta]
+    J --> K[Final Score ~ 1115.55]
+    K --> L[CREDIT APPROVED]
     
-    subgraph Phase 1: Banque Cliente
+    subgraph P1 ["PHASE 1: BANK (Trusted)"]
         A
         B
         C
         D
         E
+    end
+    
+    subgraph P2 ["PHASE 2: CLOUD (Zero-Trust)"]
+        F
+        G
+        H
+    end
+    
+    subgraph P3 ["PHASE 3: BANK (Trusted)"]
+        I
+        J
+        K
+        L
     end
     
     subgraph Phase 2: Cloud FinTech
