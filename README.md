@@ -70,42 +70,57 @@ Real-time interactive dashboard built with **Streamlit**:
 ---
 
 ## 🏗️ Architecture Flow
+
 ```mermaid
-graph TD
-    A[Raw Data z] --> B[Encode with Delta]
-    B --> C[Message m in R_q]
-    C --> D[RLWE Encryption]
-    D --> E[Ciphertext c0, c1]
-    
-    E -->|pk, evk, c| F[Cloud FinTech]
-    F --> G[HE Evaluation]
-    G --> H[Encrypted Score]
-    
-    H -->|Return| I[Decrypt: m = c0 + c1 * sk]
-    I --> J[Decode: z = m / Delta]
-    J --> K[Final Score ~ 1115.55]
-    K --> L[CREDIT APPROVED]
-    
-    subgraph P1 ["PHASE 1: BANK (Trusted)"]
-        A
-        B
-        C
-        D
-        E
+flowchart TD
+
+    %% =========================
+    %% PHASE 1: BANK
+    %% =========================
+    subgraph P1["🏦 PHASE 1: BANK (Trusted Enclave)"]
+        A["Raw Data z"]
+        B["Encode with Δ"]
+        C["Message m ∈ R_q"]
+        D["RLWE Encryption"]
+        E["Ciphertext (c₀, c₁)"]
+
+        A --> B
+        B --> C
+        C --> D
+        D --> E
     end
-    
-    subgraph P2 ["PHASE 2: CLOUD (Zero-Trust)"]
-        F
-        G
-        H
+
+    %% =========================
+    %% PHASE 2: CLOUD
+    %% =========================
+    subgraph P2["☁️ PHASE 2: CLOUD (Zero-Trust)"]
+        F["Cloud FinTech"]
+        G["HE Evaluation"]
+        H["Encrypted Score"]
+
+        F --> G
+        G --> H
     end
-    
-    subgraph P3 ["PHASE 3: BANK (Trusted)"]
-        I
-        J
-        K
-        L
+
+    %% =========================
+    %% PHASE 3: BANK
+    %% =========================
+    subgraph P3["🏦 PHASE 3: BANK (Trusted Enclave)"]
+        I["Decrypt"]
+        J["Decode"]
+        K["Final Score ≈ 1115.55"]
+        L["CREDIT APPROVED"]
+
+        I --> J
+        J --> K
+        K --> L
     end
+
+    %% =========================
+    %% CROSS-PHASE FLOWS
+    %% =========================
+    E -->|"pk, evk, c"| F
+    H -->|"Return"| I
 ```
 ```bash
 =======================================================================
