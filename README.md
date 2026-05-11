@@ -107,7 +107,7 @@ graph TD
         L
     end
 ```
-```text
+```bash
 =======================================================================
                    PHASE 1: BANQUE CLIENTE (Trusted Enclave)
 =======================================================================
@@ -218,8 +218,8 @@ streamlit run app.py --server.address=0.0.0.0
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/CKKS_Financial_Scoring.git
-cd CKKS_Financial_Scoring
+git clone https://github.com/mohammedkehal/Projet_Crypto_FHE_CKKS.git
+cd Projet_Crypto_FHE_CKKS
 
 # 2. Create virtual environment
 python -m venv venv
