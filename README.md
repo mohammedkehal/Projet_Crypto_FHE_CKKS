@@ -72,55 +72,47 @@ Real-time interactive dashboard built with **Streamlit**:
 ## 🏗️ Architecture Flow
 
 ```mermaid
-flowchart TD
+graph TD
 
-    %% =========================
-    %% PHASE 1: BANK
-    %% =========================
-    subgraph P1["🏦 PHASE 1: BANK (Trusted Enclave)"]
-        A["Raw Data z"]
-        B["Encode with Δ"]
-        C["Message m ∈ R_q"]
-        D["RLWE Encryption"]
-        E["Ciphertext (c₀, c₁)"]
+%% ===== PHASE 1 : BANK =====
+subgraph PHASE1 [PHASE 1: BANK (Trusted Enclave)]
+    A[Raw Data z]
+    B[Encode with Delta]
+    C[Message m in Rq]
+    D[RLWE Encryption]
+    E[Ciphertext (c0, c1)]
 
-        A --> B
-        B --> C
-        C --> D
-        D --> E
-    end
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+end
 
-    %% =========================
-    %% PHASE 2: CLOUD
-    %% =========================
-    subgraph P2["☁️ PHASE 2: CLOUD (Zero-Trust)"]
-        F["Cloud FinTech"]
-        G["HE Evaluation"]
-        H["Encrypted Score"]
+%% ===== PHASE 2 : CLOUD =====
+subgraph PHASE2 [PHASE 2: CLOUD (Zero-Trust)]
+    F[Cloud FinTech]
+    G[HE Evaluation]
+    H[Encrypted Score]
 
-        F --> G
-        G --> H
-    end
+    F --> G
+    G --> H
+end
 
-    %% =========================
-    %% PHASE 3: BANK
-    %% =========================
-    subgraph P3["🏦 PHASE 3: BANK (Trusted Enclave)"]
-        I["Decrypt"]
-        J["Decode"]
-        K["Final Score ≈ 1115.55"]
-        L["CREDIT APPROVED"]
+%% ===== PHASE 3 : BANK =====
+subgraph PHASE3 [PHASE 3: BANK (Trusted Enclave)]
+    I[Decrypt]
+    J[Decode]
+    K[Final Score 1115.55]
+    L[CREDIT APPROVED]
 
-        I --> J
-        J --> K
-        K --> L
-    end
+    I --> J
+    J --> K
+    K --> L
+end
 
-    %% =========================
-    %% CROSS-PHASE FLOWS
-    %% =========================
-    E -->|"pk, evk, c"| F
-    H -->|"Return"| I
+%% ===== CROSS-PHASE LINKS =====
+E -->|pk, evk, c| F
+H -->|Return| I
 ```
 ```bash
 =======================================================================
