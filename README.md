@@ -74,13 +74,12 @@ Real-time interactive dashboard built with **Streamlit**:
 ```mermaid
 graph TD
 
-%% ===== PHASE 1 : BANK =====
-subgraph PHASE1 [PHASE 1: BANK (Trusted Enclave)]
-    A[Raw Data z]
-    B[Encode with Delta]
-    C[Message m in Rq]
-    D[RLWE Encryption]
-    E[Ciphertext (c0, c1)]
+subgraph PHASE1["PHASE 1: BANK - Trusted Enclave"]
+    A["Raw Data z"]
+    B["Encode with Delta"]
+    C["Message m in Rq"]
+    D["RLWE Encryption"]
+    E["Ciphertext (c0, c1)"]
 
     A --> B
     B --> C
@@ -88,31 +87,28 @@ subgraph PHASE1 [PHASE 1: BANK (Trusted Enclave)]
     D --> E
 end
 
-%% ===== PHASE 2 : CLOUD =====
-subgraph PHASE2 [PHASE 2: CLOUD (Zero-Trust)]
-    F[Cloud FinTech]
-    G[HE Evaluation]
-    H[Encrypted Score]
+subgraph PHASE2["PHASE 2: CLOUD - Zero-Trust"]
+    F["Cloud FinTech"]
+    G["HE Evaluation"]
+    H["Encrypted Score"]
 
     F --> G
     G --> H
 end
 
-%% ===== PHASE 3 : BANK =====
-subgraph PHASE3 [PHASE 3: BANK (Trusted Enclave)]
-    I[Decrypt]
-    J[Decode]
-    K[Final Score 1115.55]
-    L[CREDIT APPROVED]
+subgraph PHASE3["PHASE 3: BANK - Trusted Enclave"]
+    I["Decrypt"]
+    J["Decode"]
+    K["Final Score 1115.55"]
+    L["CREDIT APPROVED"]
 
     I --> J
     J --> K
     K --> L
 end
 
-%% ===== CROSS-PHASE LINKS =====
-E -->|pk, evk, c| F
-H -->|Return| I
+E -->|"pk, evk, c"| F
+H -->|"Return"| I
 ```
 ```bash
 =======================================================================
