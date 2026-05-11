@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+env/
+.env
+
+# Streamlit/Docker
+.streamlit/
+.dockerignore
+
+# OS generated files
+.DS_Store
+Thumbs.db
