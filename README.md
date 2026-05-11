@@ -70,86 +70,117 @@ Real-time interactive dashboard built with **Streamlit**:
 ---
 
 ## 🏗️ Architecture Flow
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 1: BANQUE CLIENTE │
-│ (Trusted Enclave) │
-│ │
-│ Données Brutes z ∈ R^{N/2} │
-│ [4500.0, 1200.5, 710.0, 34.0] │
-│ │ │
-│ ▼ │
-│ Encodage Δ = 2^{40} ──► Polynôme m ∈ R_q │
-│ │ │
-│ ▼ │
-│ Chiffrement RLWE ──► c = (c₀, c₁) │
-│ │
-│ 🔑 sk (gardée localement) │ 📤 pk, evk, c → Cloud │
-└─────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 2: CLOUD FINTECH │
-│ (Zero-Trust Environment) │
-│ │
-│ 📥 Réception de pk, evk, c │
-│ │ │
-│ ▼ │
-│ Modèle IA: W = [0.4, -0.7, 0.2, 0.1], Biais = +10.5 │
-│ │ │
-│ ▼ │
-│ Évaluation Homomorphe: c_res = c · W + Biais │
-│ (Additions, Multiplications, Relinéarisation, Rescaling) │
-│ │ │
-│ ▼ │
-│ Bruit critique ? ──► Non (profondeur = 1) ──► On continue │
-│ │ │
-│ ▼ │
-│ 📤 Score chiffré → Banque │
-└─────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 3: BANQUE CLIENTE │
-│ (Trusted Enclave) │
-│ │
-│ 📥 Réception du score chiffré │
-│ │ │
-│ ▼ │
-│ Déchiffrement: m' = c₀ + c₁ · sk (mod q) │
-│ │ │
-│ ▼ │
-│ Décodage: z' = m' / Δ │
-│ │ │
-│ ▼ │
-│ Score final ≈ 1115.55 ──► CRÉDIT ACCORDÉ ✅ │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    A[Données Brutes z] --> B[Encodage Δ = 2^40]
+    B --> C[Polynôme m ∈ R_q]
+    C --> D[Chiffrement RLWE]
+    D --> E[Ciphertext c = (c₀, c₁)]
+    
+    E -->|pk, evk, c| F[Cloud FinTech]
+    F --> G[Évaluation Homomorphe]
+    G --> H[Score Chiffré]
+    
+    H -->|Retour| I[Déchiffrement m' = c₀ + c₁·sk]
+    I --> J[Décodage z' = m'/Δ]
+    J --> K[Score Final ≈ 1115.55]
+    K --> L[CRÉDIT ACCORDÉ ✅]
+    
+    subgraph Phase 1: Banque Cliente
+        A
+        B
+        C
+        D
+        E
+    end
+    
+    subgraph Phase 2: Cloud FinTech
+        F
+        G
+        H
+    end
+    
+    subgraph Phase 3: Banque Cliente
+        I
+        J
+        K
+        L
+    end
+═══════════════════════════════════════════════════════════════════════
+                    PHASE 1: BANQUE CLIENTE (Trusted Enclave)
+═══════════════════════════════════════════════════════════════════════
+
+  Données Brutes z ∈ R^(N/2)
+  [4500.0, 1200.5, 710.0, 34.0]
+         │
+         ▼
+  Encodage Δ = 2^40  ──►  Polynôme m ∈ R_q
+         │
+         ▼
+  Chiffrement RLWE  ──►  c = (c₀, c₁)
+
+  🔑 sk (gardée localement)  │  📤 pk, evk, c → Cloud
+
+═══════════════════════════════════════════════════════════════════════
+                    PHASE 2: CLOUD FINTECH (Zero-Trust)
+═══════════════════════════════════════════════════════════════════════
+
+  📥 Réception de pk, evk, c
+         │
+         ▼
+  Modèle IA: W = [0.4, -0.7, 0.2, 0.1], Biais = +10.5
+         │
+         ▼
+  Évaluation Homomorphe: c_res = c · W + Biais
+  (Additions, Multiplications, Relinéarisation, Rescaling)
+         │
+         ▼
+  Bruit critique ? ──► Non (profondeur = 1) ──► On continue
+         │
+         ▼
+  📤 Score chiffré → Banque
+
+═══════════════════════════════════════════════════════════════════════
+                    PHASE 3: BANQUE CLIENTE (Trusted Enclave)
+═══════════════════════════════════════════════════════════════════════
+
+  📥 Réception du score chiffré
+         │
+         ▼
+  Déchiffrement: m' = c₀ + c₁ · sk  (mod q)
+         │
+         ▼
+  Décodage: z' = m' / Δ
+         │
+         ▼
+  Score final ≈ 1115.55  ──►  CRÉDIT ACCORDÉ ✅
 
 ---
 
 ## 📁 Project Structure
 CKKS_Financial_Scoring/
 │
-├── bank_client/ # 🏦 Trusted Banking Enclave
-│ ├── init.py
-│ ├── keygen.py # Key generation (sk, pk, evk)
-│ ├── encrypt.py # Data encoding & RLWE encryption
-│ ├── decrypt.py # Score decryption & decoding
-│ └── bank_context_secret.txt # Secret context (sk) — NEVER leaves
+├── bank_client/                    # 🏦 Trusted Banking Enclave
+│   ├── __init__.py
+│   ├── keygen.py                   # Key generation (sk, pk, evk)
+│   ├── encrypt.py                  # Data encoding & RLWE encryption
+│   ├── decrypt.py                  # Score decryption & decoding
+│   └── bank_context_secret.txt     # 🔑 Secret context (sk) — NEVER leaves
 │
-├── fintech_cloud/ # ☁️ Untrusted Cloud FinTech
-│ ├── init.py
-│ ├── ai_scoring_model.py # AI model weights & bias
-│ └── homomorphic_evaluation.py # Blind inference on ciphertexts
+├── fintech_cloud/                  # ☁️ Untrusted Cloud FinTech
+│   ├── __init__.py
+│   ├── ai_scoring_model.py         # AI model weights & bias
+│   └── homomorphic_evaluation.py   # Blind inference on ciphertexts
 │
-├── shared_data/ # 🔄 Encrypted data exchange zone
-│ ├── cloud_context_public.txt # Public context (pk, evk only)
-│ ├── client_ciphertext.txt # Encrypted client dossier
-│ └── encrypted_score_result.txt # Encrypted credit score
+├── shared_data/                    # 🔄 Encrypted data exchange zone
+│   ├── cloud_context_public.txt    # Public context (pk, evk only)
+│   ├── client_ciphertext.txt       # Encrypted client dossier
+│   └── encrypted_score_result.txt  # Encrypted credit score
 │
-├── app.py # 🖥️ SOC Streamlit dashboard
-├── Dockerfile # 🐳 Container configuration
-├── requirements.txt # 📦 Python dependencies
-└── README.md # 📖 This file
+├── app.py                          # 🖥️ SOC Streamlit dashboard
+├── Dockerfile                      # 🐳 Container configuration
+├── requirements.txt                # 📦 Python dependencies
+└── README.md                       # 📖 This file
 
 
 ## 👨‍💻 Author
