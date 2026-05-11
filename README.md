@@ -108,83 +108,77 @@ graph TD
     end
 ```
 ---
-═══════════════════════════════════════════════════════════════════════
-                    PHASE 1: BANQUE CLIENTE (Trusted Enclave)
-═══════════════════════════════════════════════════════════════════════
-
-  Données Brutes z ∈ R^(N/2)
-  [4500.0, 1200.5, 710.0, 34.0]
-         │
-         ▼
-  Encodage Δ = 2^40  ──►  Polynôme m ∈ R_q
-         │
-         ▼
-  Chiffrement RLWE  ──►  c = (c₀, c₁)
-
-  🔑 sk (gardée localement)  │  📤 pk, evk, c → Cloud
-
-═══════════════════════════════════════════════════════════════════════
-                    PHASE 2: CLOUD FINTECH (Zero-Trust)
-═══════════════════════════════════════════════════════════════════════
-
-  📥 Réception de pk, evk, c
-         │
-         ▼
-  Modèle IA: W = [0.4, -0.7, 0.2, 0.1], Biais = +10.5
-         │
-         ▼
-  Évaluation Homomorphe: c_res = c · W + Biais
-  (Additions, Multiplications, Relinéarisation, Rescaling)
-         │
-         ▼
-  Bruit critique ? ──► Non (profondeur = 1) ──► On continue
-         │
-         ▼
-  📤 Score chiffré → Banque
-
-═══════════════════════════════════════════════════════════════════════
-                    PHASE 3: BANQUE CLIENTE (Trusted Enclave)
-═══════════════════════════════════════════════════════════════════════
-
-  📥 Réception du score chiffré
-         │
-         ▼
-  Déchiffrement: m' = c₀ + c₁ · sk  (mod q)
-         │
-         ▼
-  Décodage: z' = m' / Δ
-         │
-         ▼
-  Score final ≈ 1115.55  ──►  CRÉDIT ACCORDÉ ✅
-
----
 
 ## 📁 Project Structure
 CKKS_Financial_Scoring/
-│
-├── bank_client/                    # 🏦 Trusted Banking Enclave
-│   ├── __init__.py
-│   ├── keygen.py                   # Key generation (sk, pk, evk)
-│   ├── encrypt.py                  # Data encoding & RLWE encryption
-│   ├── decrypt.py                  # Score decryption & decoding
-│   └── bank_context_secret.txt     # 🔑 Secret context (sk) — NEVER leaves
-│
-├── fintech_cloud/                  # ☁️ Untrusted Cloud FinTech
-│   ├── __init__.py
-│   ├── ai_scoring_model.py         # AI model weights & bias
-│   └── homomorphic_evaluation.py   # Blind inference on ciphertexts
-│
-├── shared_data/                    # 🔄 Encrypted data exchange zone
-│   ├── cloud_context_public.txt    # Public context (pk, evk only)
-│   ├── client_ciphertext.txt       # Encrypted client dossier
-│   └── encrypted_score_result.txt  # Encrypted credit score
-│
-├── app.py                          # 🖥️ SOC Streamlit dashboard
-├── Dockerfile                      # 🐳 Container configuration
-├── requirements.txt                # 📦 Python dependencies
-└── README.md                       # 📖 This file
+|
++-- bank_client/                    # Trusted Banking Enclave
+|   +-- __init__.py
+|   +-- keygen.py                   # Key generation (sk, pk, evk)
+|   +-- encrypt.py                  # Data encoding & RLWE encryption
+|   +-- decrypt.py                  # Score decryption & decoding
+|   +-- bank_context_secret.txt     # Secret context (sk) - NEVER leaves
+|
++-- fintech_cloud/                  # Untrusted Cloud FinTech
+|   +-- __init__.py
+|   +-- ai_scoring_model.py         # AI model weights & bias
+|   +-- homomorphic_evaluation.py   # Blind inference on ciphertexts
+|
++-- shared_data/                    # Encrypted data exchange zone
+|   +-- cloud_context_public.txt    # Public context (pk, evk only)
+|   +-- client_ciphertext.txt       # Encrypted client dossier
+|   +-- encrypted_score_result.txt  # Encrypted credit score
+|
++-- app.py                          # SOC Streamlit dashboard
++-- Dockerfile                      # Container configuration
++-- requirements.txt                # Python dependencies
++-- README.md                       # This file
 
 ---
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Docker** installed ([Get Docker](https://docs.docker.com/get-docker/))
+- **Git** installed ([Get Git](https://git-scm.com/))
+
+### Option 1: Docker (Recommended)
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/YOUR_USERNAME/CKKS_Financial_Scoring.git
+cd CKKS_Financial_Scoring
+
+# 2. Build the Docker image
+docker build -t ckks-finance .
+
+# 3. Run the container
+docker run -it -p 8501:8501 -v ${PWD}:/app ckks-finance
+
+# 4. Inside the container, launch the SOC dashboard
+streamlit run app.py --server.address=0.0.0.0
+
+# 5. Open your browser
+# Local URL: http://localhost:8501
+```
+### Option 2: Manual Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/YOUR_USERNAME/CKKS_Financial_Scoring.git
+cd CKKS_Financial_Scoring
+
+# 2. Create virtual environment
+python -m venv venv
+source venv/bin/activate   # Linux/Mac
+# venv\Scripts\activate    # Windows
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run the SOC dashboard
+streamlit run app.py
+```
 ## 👨‍💻 Author
 **Mohammed KEHAL** |
 **Zineb CHAFIK** |
