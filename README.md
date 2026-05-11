@@ -70,95 +70,75 @@ Real-time interactive dashboard built with **Streamlit**:
 ---
 
 ## 🏗️ Architecture Flow
-
-```mermaid
-graph TD
-
-subgraph PHASE1["PHASE 1: BANK - Trusted Enclave"]
-    A["Raw Data z"]
-    B["Encode with Delta"]
-    C["Message m in Rq"]
-    D["RLWE Encryption"]
-    E["Ciphertext (c0, c1)"]
-
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-end
-
-subgraph PHASE2["PHASE 2: CLOUD - Zero-Trust"]
-    F["Cloud FinTech"]
-    G["HE Evaluation"]
-    H["Encrypted Score"]
-
-    F --> G
-    G --> H
-end
-
-subgraph PHASE3["PHASE 3: BANK - Trusted Enclave"]
-    I["Decrypt"]
-    J["Decode"]
-    K["Final Score 1115.55"]
-    L["CREDIT APPROVED"]
-
-    I --> J
-    J --> K
-    K --> L
-end
-
-E -->|"pk, evk, c"| F
-H -->|"Return"| I
-```
-```bash
+```text
 =======================================================================
-                   PHASE 1: BANQUE CLIENTE (Trusted Enclave)
+                   PHASE 1: BANK CLIENT (Trusted Enclave)
 =======================================================================
 
-  Raw Data z in R^(N/2)
-  [4500.0, 1200.5, 710.0, 34.0]
+  Raw Data z = [4500.0, 1200.5, 710.0, 34.0]
          |
          v
-  Encoding: Delta = 2^40  -->  Polynomial m in R_q
+  Encode with Delta (Δ = 2^40)
          |
          v
-  RLWE Encryption  -->  c = (c0, c1)
+  Message m in Rq
+         |
+         v
+  RLWE Encryption
+         |
+         v
+  Ciphertext c = (c0, c1)
 
-  [KEY] sk (kept local)  |  [OUT] pk, evk, c --> Cloud
+  Secret Key (sk) remains inside the bank only.
+  Public Key (pk), Evaluation Key (evk), and Ciphertext (c)
+  are sent to the Cloud FinTech.
 
 =======================================================================
                    PHASE 2: CLOUD FINTECH (Zero-Trust)
 =======================================================================
 
-  [IN] Receive pk, evk, c
+  Input: pk, evk, c
          |
          v
-  AI Model: W = [0.4, -0.7, 0.2, 0.1], Bias = +10.5
+  AI Model:
+      W = [0.4, -0.7, 0.2, 0.1]
+      Bias = 10.5
          |
          v
-  HE Evaluation: c_res = c * W + Bias
-  (Add, Mult, Relinearize, Rescale)
+  Homomorphic Evaluation:
+      c_result = c * W + Bias
          |
          v
-  Noise critical? --> No (depth = 1) --> Continue
+  Operations:
+      - Multiplication
+      - Addition
+      - Relinearization
+      - Rescaling
          |
          v
-  [OUT] Encrypted score --> Bank
+  Output: Encrypted Score
+
+  The Cloud never decrypts the data.
 
 =======================================================================
-                   PHASE 3: BANQUE CLIENTE (Trusted Enclave)
+                   PHASE 3: BANK CLIENT (Trusted Enclave)
 =======================================================================
 
-  [IN] Receive encrypted score
+  Receive Encrypted Score
          |
          v
-  Decrypt: m' = c0 + c1 * sk  (mod q)
+  Decrypt:
+      m' = c0 + c1 * sk (mod q)
          |
          v
-  Decode: z' = m' / Delta
+  Decode:
+      z' = m' / Delta
          |
          v
-  Final Score ~ 1115.55  -->  CREDIT APPROVED ✓
+  Final Credit Score ≈ 1115.55
+         |
+         v
+  CREDIT APPROVED ✓
 ```
 ---
 
